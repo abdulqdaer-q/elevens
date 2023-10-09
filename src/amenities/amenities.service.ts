@@ -53,8 +53,10 @@ export class AmenitiesService {
       return {res : res,media : media}
   }
 
- async create(amenitie : CreateAmenitiesDto)   {
+    async create(amenitie : CreateAmenitiesDto)   {
+      const apartmentId = amenitie.apartment
     return await this.ameniteRepository.save( 
+      
         this.ameniteRepository.create({...amenitie}))
   }
 

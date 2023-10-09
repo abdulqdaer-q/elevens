@@ -19,7 +19,7 @@ export class ApartmentController {
 
 
   @Get('')
-  findAll(): Promise<Apartment[]> {
+  findAll(){
     return this.apartmentService.findAll();
   }
 
@@ -27,12 +27,33 @@ export class ApartmentController {
   findOne(@Param('id') id: number){
     return this.apartmentService.findOne(id);
   }
+
   
 
   @Post('')
   create(@Body(new ValidationPipe()) createApartmentDto: CreateApartmentDto) {
     return this.apartmentService.create({...createApartmentDto});
   }
+  @Post('addAmenities')
+  async addAmenities(@Body(new ValidationPipe()) amenities) {
+    if (!Array.isArray(amenities)) {
+      throw new Error('Amenities should be an array'); // Handle error appropriately
+    }
+
+    // Process each amenity in the array
+    const results = [];
+    for (const amenity of amenities) {
+      const { apartmentId, amenityId } = amenity;
+      const result = await this.apartmentService.addAmenityToApartment(apartmentId, amenityId);
+      await results.push(result);
+      console.log(results)
+    }
+    
+
+    return results;
+  }
+
+
   
   @Put(':id')
   update(
@@ -44,7 +65,6 @@ export class ApartmentController {
 
   @Delete(':id')
   @HttpCode(204)
-
   remove(@Param('id') id: number): Promise<void> {
     return this.apartmentService.remove(id);
   }

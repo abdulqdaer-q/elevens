@@ -12,6 +12,7 @@ import { AmenitiesModule } from './amenities/amenities.module';
 import { Amenitie } from './amenities/entity/amenities/amenities';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entity/contact/contact';
+import { ApartmentAmenity } from './apartment/entity/apartment/ApartmentAmenity ';
 
 
 
@@ -27,13 +28,14 @@ import { Contact } from './contact/entity/contact/contact';
       username: 'root',
       password: 'loca1234',
       database: 'elevens',
-      entities: [Apartment,Media,Amenitie,Contact],
+      entities: [Apartment,Media,Amenitie,Contact,ApartmentAmenity],
       synchronize: true,
     }),
     AmenitiesModule,
     ContactModule,
     ApartmentModule,
     MediaModule,
+    
 
 
     

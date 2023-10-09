@@ -1,5 +1,7 @@
 import {  ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ApartmentAmenity } from 'src/apartment/entity/apartment/ApartmentAmenity ';
+import { Apartment } from 'src/apartment/entity/apartment/apartment';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({name : 'amenities'})
 export class Amenitie {
@@ -10,5 +12,11 @@ export class Amenitie {
   @ApiProperty()
   @Column()
   title: string;
+
+  @OneToMany(
+    () => ApartmentAmenity,
+    (apartmentAmenity) => apartmentAmenity.amenitieId,
+  )
+  apartments: ApartmentAmenity[];
 
 }
