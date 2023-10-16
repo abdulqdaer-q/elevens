@@ -1,10 +1,6 @@
-// src/apartment/apartment.service.ts
-
 import { Injectable } from '@nestjs/common';
 import {
   Connection,
-  DataSource,
-  RelationId,
   Repository,
   getManager,
   getRepository,
@@ -74,68 +70,36 @@ export class ApartmentService {
   }
 
   async findOne(id: number) {
-    /*const reloadedApartment = await this.apartmentRepository
-    .createQueryBuilder('apartment')
-    .leftJoinAndSelect('apartment.amenities', 'amenities')
-    .where('apartment.id = :id', { id: id })
-    .getMany();
-    relations: ['apartment' ,'amenitieId']
-    //const apartment = await this.apartmentRepository.findOne({ where: { id } ,relations: ['amenitie']})
-     // Query the junction table to get the associated amenity IDs
-    /*
-    const apartmentAmenities = await this.apartmentAmenityRepository.find({
-      where: { apartment: { id: id } },
-    });
-    //console.log(apartmentAmenities)
-
-    // Extract amenity IDs from the junction table results
-    const amenityIds = await apartmentAmenities.map((association) =>{ association.amenitieId
-  //     console.log(association.amenitieId)
-      });
-   // console.log(amenityIds)
-
-    // Query the amenities based on their IDs
-    let z = []
-    const amenities = await apartmentAmenities.forEach(async e => {
-      let x = await this.amenitieRepository.findOneBy(e.amenitieId);
-      z.push(x)
-
-    })
-   // apartment.amenitie=z*/
-
-    const query = `Select name,filePath
+    let amenities = [];
+    let amenitiesId = [];
+    const apartment = await this.apartmentRepository.findOne({ where: { id } });
+    const query = `Select filePath  
     FROM media
     LEFT JOIN apartments ON media.columnId = apartments.id
-    where media.columnId = ${id}`;
-    let amenities = [];
-    const result = await this.connection.query(query);
-    const apartment = await this.apartmentRepository.findOne({ where: { id } });
+    WHERE media.columnId = ${id} AND media.table = 'apartment'`;
     const apartmentAmenities = await this.apartmentAmenityRepository.find({
       where: { apartment: { id: id } },
       relations: ['apartment', 'amenitieId'],
     });
-    if (!apartment) {
-      throw new Error('Apartment not found');
-    }
     apartmentAmenities.map((e) => {
       amenities.push(e.amenitieId);
     });
-    let amenitiesId = [];
     amenities.map((e) => {
       e.id;
       amenitiesId.push(e.id);
     });
 
     const promises = amenitiesId.map(async (e) => {
-      const query = `SELECT name, filePath
-    FROM media
+      const query = `SELECT name, filePath, amenities.title
+    FROM media 
     LEFT JOIN amenities ON media.columnId = amenities.id
-    WHERE media.columnId = ${e}`;
+    WHERE media.columnId = ${e} AND media.table = 'amenities'`;
       return await this.connection.query(query);
     });
 
+    const result = await this.connection.query(query);
     const amenitiesMedia = await Promise.all(promises);
-    apartment.amenitie = amenities;
+
     return {
       apartment: apartment,
       media: result,
@@ -154,7 +118,8 @@ export class ApartmentService {
     return this.apartmentRepository.findOne({ where: { id } });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number) {
     await this.apartmentRepository.delete(id);
+    return `Property with ID ${id} has been deleted `;
   }
 }

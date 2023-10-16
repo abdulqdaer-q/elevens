@@ -33,6 +33,6 @@ export class ContactService {
 
   async deleteContact(id: number) {
     await this.contactRepository.delete(id);
-    return `Contact request with id ${id} has been delated`
+    return `Contact request with id ${id} has been deleted`
   }
 }

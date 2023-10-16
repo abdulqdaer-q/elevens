@@ -41,16 +41,15 @@ export class ApartmentController {
     }
 
     // Process each amenity in the array
-    const results = [];
-    for (const amenity of amenities) {
-      const { apartmentId, amenityId } = amenity;
-      const result = await this.apartmentService.addAmenityToApartment(apartmentId, amenityId);
-      await results.push(result);
-      console.log(results)
-    }
+
+      amenities.forEach( async e => {
+        console.log(e)
+        const result = await this.apartmentService.addAmenityToApartment(e.apartmentId, e.amenityId);
+      })
+    
     
 
-    return results;
+    return 'Done';
   }
 
 
@@ -65,7 +64,7 @@ export class ApartmentController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: number): Promise<void> {
+  remove(@Param('id') id: number) {
     return this.apartmentService.remove(id);
   }
 }

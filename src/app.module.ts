@@ -13,6 +13,12 @@ import { Amenitie } from './amenities/entity/amenities/amenities';
 import { ContactModule } from './contact/contact.module';
 import { Contact } from './contact/entity/contact/contact';
 import { ApartmentAmenity } from './apartment/entity/apartment/ApartmentAmenity ';
+import { SocialMediaModule } from './social-media/social-media.module';
+import { SocialMedia } from './social-media/entity/social-media';
+import { BookingModule } from './booking/booking.module';
+import { Booking } from './booking/entity/booking';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 
 
@@ -28,21 +34,28 @@ import { ApartmentAmenity } from './apartment/entity/apartment/ApartmentAmenity 
       username: 'root',
       password: 'loca1234',
       database: 'elevens',
-      entities: [Apartment,Media,Amenitie,Contact,ApartmentAmenity],
+      entities: [Apartment,Media,Amenitie,Contact,ApartmentAmenity,SocialMedia,Booking],
       synchronize: true,
     }),
     AmenitiesModule,
     ContactModule,
     ApartmentModule,
     MediaModule,
-    
+    SocialMediaModule,
+    BookingModule,
 
-
-    
+  
     MulterModule.register({dest:'./uplodas'}),
+/* 
+   ServeStaticModule.forRoot({
+      rootPath: join(__dirname,'..','uploads'),
+      serveStaticOptions: {
 
-
-    
+        index: false
+      }
+      
+    }), */
+  
   ],
   controllers: [AppController],
   providers: [AppService],
