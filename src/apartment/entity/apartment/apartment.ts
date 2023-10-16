@@ -1,7 +1,9 @@
 // src/apartment/entity/apartment.entity.ts
 
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Amenitie } from 'src/amenities/entity/amenities/amenities';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToOne, ManyToMany, JoinTable, CreateDateColumn } from 'typeorm';
+import { ApartmentAmenity } from './ApartmentAmenity ';
 
 @Entity({name : 'apartments'})
 export class Apartment {
@@ -34,14 +36,24 @@ export class Apartment {
   @ApiProperty()s
   @Column()
   space: string;
+  
+  @CreateDateColumn()
+  publishedAt: Date;
 
   @ApiProperty()
   @Column()
   rented: boolean;
 
   @ApiProperty()
-  @Column({ type: 'enum', enum: ['A', 'B', 'C', 'D'] })
+  @Column({ type: 'enum', enum: ['One Bedroom', 'Studio', 'Penta House', 'Loft'] })
   category: string;
+
+  @OneToMany(
+    () => ApartmentAmenity,
+    (apartmentAmenity) => apartmentAmenity.apartment,
+  )
+  amenities: ApartmentAmenity[];
+
 
 
 }

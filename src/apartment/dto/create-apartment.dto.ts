@@ -34,8 +34,8 @@ export class CreateApartmentDto {
   @ApiProperty()
   rented: boolean;
 
-  @IsEnum(['A','B'])
-  @ApiProperty({enum: ['A', 'B']})
+  @IsEnum(['One Bedroom', 'Studio', 'Penta House', 'Loft'])
+  @ApiProperty({enum:  ['One Bedroom', 'Studio', 'Penta House', 'Loft']})
   category: string;
 }
 

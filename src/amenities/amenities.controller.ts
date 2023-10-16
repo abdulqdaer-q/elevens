@@ -23,7 +23,8 @@ export class AmenitiesController {
 
     @Post('')
     create(@Body(new ValidationPipe()) createAmenitiesDto : CreateAmenitiesDto){
-        return this.ameniteService.create({...createAmenitiesDto})
+        
+        return this.ameniteService.create(createAmenitiesDto)
     }
 
     @Put(':id')
